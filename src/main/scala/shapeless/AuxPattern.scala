@@ -42,6 +42,6 @@ object AuxPattern {
 
 
   //Next
-  def applyOps[T](t: T)(implicit op: OperationAux[T], op2: OperationAux[op.Result1]): op2.Result1 = op2.apply(op.apply(t))
+  //def applyOps[T](t: T)(implicit op: OperationAux[T], op2: OperationAux[op.Result1]): op2.Result1 = op2.apply(op.apply(t))
 
 }
