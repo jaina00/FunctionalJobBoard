@@ -1,6 +1,5 @@
 package shapeless
 
-import shapeless.Generic
 import shapeless.syntax.singleton._
 
 

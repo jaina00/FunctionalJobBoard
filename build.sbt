@@ -8,7 +8,9 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats" % "0.9.0",
   "com.chuusai" %% "shapeless" % "2.3.3",
   "com.github.mpilquist" %% "simulacrum"     % "0.12.0",
-  "org.scalaz"           %% "scalaz-core"    % "7.2.20"
+  "org.scalaz"           %% "scalaz-core"    % "7.2.20",
+  "org.scalactic" %% "scalactic" % "3.0.5",
+  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
 
 )
 
