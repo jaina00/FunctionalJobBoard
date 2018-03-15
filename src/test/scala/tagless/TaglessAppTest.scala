@@ -1,10 +1,8 @@
 package tagless
 
-import java.util.UUID
-
 import cats.Id
-import org.scalatest.WordSpec
 import org.scalatest.Matchers._
+import org.scalatest.WordSpec
 
 class TaglessAppTest extends WordSpec {
 
@@ -28,5 +26,10 @@ class TaglessAppTest extends WordSpec {
     "update user's loyalty points" in {
       loyaltyPoints.addPoints("12345", 10) shouldBe Right(User("1234", 110))
     }
+
+    "throw exception" in {
+      loyaltyPoints.addPoints("abc", 10) shouldBe Right(User("1234", 110))
+    }
+
   }
 }

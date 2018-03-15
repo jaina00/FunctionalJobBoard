@@ -15,7 +15,9 @@ trait UserRepositoryAlgebra[F[_]] {
 
 class LoyaltyPoints[F[_] : Monad](ur: UserRepositoryAlgebra[F]) {
   def addPoints(userId: String, pointsToAdd: Int): F[Either[String, User]] = {
-    ur.findUser(userId).flatMap {
+    ur
+      .findUser(userId)
+      .flatMap {
       case None => implicitly[Monad[F]].pure(Left("User not found"))
       case Some(user) =>
         implicitly[Monad[F]].pure(
