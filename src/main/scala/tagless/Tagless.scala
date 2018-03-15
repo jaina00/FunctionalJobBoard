@@ -1,6 +1,7 @@
 package tagless
 
 import cats.Monad
+import cats.data.EitherT
 import cats.implicits._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -10,33 +11,29 @@ import scala.concurrent.{Await, Future}
 case class User(id: String = "", loyaltyPoints: Int = 0)
 
 trait UserRepositoryAlgebra[F[_]] {
-  def findUser(id: String): F[Option[User]]
+  //def findUser(id: String): F[EitherString[User]]
+  def findUser(id: String): EitherT[F, BusinessError, User]
 }
 
 class LoyaltyPoints[F[_] : Monad](ur: UserRepositoryAlgebra[F]) {
-  def addPoints(userId: String, pointsToAdd: Int): F[Either[String, User]] = {
-    ur
-      .findUser(userId)
-      .flatMap {
-      case None => implicitly[Monad[F]].pure(Left("User not found"))
-      case Some(user) =>
-        implicitly[Monad[F]].pure(
-          Right(user.copy(loyaltyPoints = user.loyaltyPoints + pointsToAdd)))
-    }
+  def addPoints(userId: String, pointsToAdd: Int): EitherT[F, BusinessError, User] = {
+    for {
+      user <- ur.findUser(userId)
+    } yield user.copy(loyaltyPoints = user.loyaltyPoints + pointsToAdd)
   }
 }
 
 object FutureInterpreter extends UserRepositoryAlgebra[Future] {
-  override def findUser(id: String): Future[Option[User]] =
-    Future.successful(None) /* go and talk to a database */
+  override def findUser(id: String): EitherT[Future, BusinessError, User] = EitherT[Future, BusinessError, User] {
+    Future.successful(Right(User()))
+  }
 }
 
 
 object TaglessApp extends App {
-  val resultProd: Future[Either[String, User]] =
+  val resultProd: EitherT[Future, BusinessError, User] =
     new LoyaltyPoints(FutureInterpreter).addPoints("", 10)
-
-  println(">>>>>>>>>>>>" + Await.result(resultProd, Duration.Inf))
+  println(">>>>>>>>>>>>" + Await.result(resultProd.value, Duration.Inf))
 }
 
 

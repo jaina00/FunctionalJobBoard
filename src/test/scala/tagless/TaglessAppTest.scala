@@ -1,15 +1,16 @@
 package tagless
 
 import cats.Id
+import cats.data.EitherT
 import org.scalatest.Matchers._
 import org.scalatest.WordSpec
 
 class TaglessAppTest extends WordSpec {
 
   object IdInterpreter extends UserRepositoryAlgebra[Id] {
-    override def findUser(id: String): Id[Option[User]] = {
+    override def findUser(id: String): EitherT[Id, BusinessError, User]= {
       id match {
-        case "" => None
+        case "" => Left()
         case "12345" => Some(User("1234", loyaltyPoints = 100))
         case "abc" => throw new RuntimeException("oops something went wrong")
       }
