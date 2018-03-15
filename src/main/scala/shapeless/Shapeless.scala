@@ -1,11 +1,13 @@
 package shapeless
+
 import shapeless.Generic
 import shapeless.syntax.singleton._
 
 
-object Shapeless extends App {
+class Shapeless extends App {
 
   case class Vec(x: Int, y: Int)
+
   case class Rect(origin: Vec, size: Vec)
 
   def getRepr[A](value: A)(implicit gen: Generic[A]): gen.Repr =
@@ -16,7 +18,6 @@ object Shapeless extends App {
   val x = getRepr(Rect(Vec(0, 0), Vec(5, 5)))
 
 
-  var z = 42.narrow
-
+  val z = 42.narrow
 
 }
