@@ -2,15 +2,12 @@ package tagless.domain
 
 import cats.Monad
 import cats.implicits._
+import tagless.crossFunctional.Logger
 
 import scala.concurrent.Future
 
 case class JobSeeker(name: String, emailAddress: String, address: Option[String])
 case class JobPost(title: String, desc: String, salary: Int, city: String)
-
-trait Logger[F[_]] {
-  def info(message: String): F[Unit]
-}
 
 trait JobSeekerAlgebra[F[_]] {
   def searchJobs(searchString: String): F[List[JobPost]]

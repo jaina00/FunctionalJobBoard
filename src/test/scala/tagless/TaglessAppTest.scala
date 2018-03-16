@@ -10,7 +10,7 @@ class TaglessAppTest extends WordSpec {
   object IdInterpreter extends UserRepositoryAlgebra[Id] {
     override def findUser(id: String): EitherT[Id, BusinessError, User]= {
       id match {
-        case "" => Left()
+        case "" => EitherT.left(Id[BusinessError1] BusinessError1)
         case "12345" => Some(User("1234", loyaltyPoints = 100))
         case "abc" => throw new RuntimeException("oops something went wrong")
       }

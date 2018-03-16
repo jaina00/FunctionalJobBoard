@@ -3,6 +3,7 @@ package tagless
 import cats.Monad
 import cats.data.EitherT
 import cats.implicits._
+import tagless.crossFunctional.Logger
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -14,9 +15,10 @@ trait UserRepositoryAlgebra[F[_]] {
   def findUser(id: String): EitherT[F, BusinessError, User]
 }
 
-class LoyaltyPoints[F[_] : Monad](ur: UserRepositoryAlgebra[F]) {
+class LoyaltyPoints[F[_] : Monad](ur: UserRepositoryAlgebra[F], logger: Logger[F]) {
   def addPoints(userId: String, pointsToAdd: Int): EitherT[F, BusinessError, User] = {
     for {
+      _ <- EitherT.right(logger.info(s"Looking for user : $userId to add point : $pointsToAdd"))
       user <- ur.findUser(userId)
     } yield user.copy(loyaltyPoints = user.loyaltyPoints + pointsToAdd)
   }
