@@ -11,7 +11,6 @@ import scala.concurrent.{Await, Future}
 case class User(id: String = "", loyaltyPoints: Int = 0)
 
 trait UserRepositoryAlgebra[F[_]] {
-  //def findUser(id: String): F[EitherString[User]]
   def findUser(id: String): EitherT[F, BusinessError, User]
 }
 
